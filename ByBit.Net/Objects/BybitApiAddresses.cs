@@ -66,9 +66,31 @@
         /// </summary>
         public string InverseFuturesSocketClientAddress { get; set; } = "";
         /// <summary>
-        /// The address used by the BybitSocketClient for the Inverse futures socket API
+        /// The address used by the BybitSocketClient for the Copy trading socket API
         /// </summary>
         public string CopyTradingSocketClientAddress { get; set; } = "";
+
+        /// <summary>
+        /// The address used by the BybitSocketClient for the public Unified margin socket API
+        /// </summary>
+        public string UnifiedMarginPrivateSocketClientAddress { get; set; } = "";
+        /// <summary>
+        /// The address used by the BybitSocketClient for the private USDT contract Unified margin socket API
+        /// </summary>
+        public string UnifiedMarginPublicUSDTContractSocketClientAddress { get; set; } = "";
+        /// <summary>
+        /// The address used by the BybitSocketClient for the private USDC contract Unified margin socket API
+        /// </summary>
+        public string UnifiedMarginPublicUSDCContractSocketClientAddress { get; set; } = "";
+        /// <summary>
+        /// The address used by the BybitSocketClient for the private USDC option Unified margin socket API
+        /// </summary>
+        public string UnifiedMarginPublicUSDCOptionSocketClientAddress { get; set; } = "";
+
+        /// <summary>
+        /// The address used by the BybitClient for the Unified margin rest API
+        /// </summary>
+        public string UnifiedMarginRestClientAddress { get; set; } = "";
 
         /// <summary>
         /// The default addresses to connect to the Bybit.com API
@@ -90,6 +112,11 @@
             InverseFuturesSocketClientAddress = "wss://stream.bybit.com/realtime",
             CopyTradingRestClientAddress = "https://api.bybit.com",
             CopyTradingSocketClientAddress = "wss://stream.bybit.com/realtime_private",
+            UnifiedMarginRestClientAddress = "https://api.bybit.com",
+            UnifiedMarginPrivateSocketClientAddress = "wss://stream.bybit.com/unified/private/v3",
+            UnifiedMarginPublicUSDTContractSocketClientAddress = "wss://stream.bybit.com/contract/usdt/public/v3",
+            UnifiedMarginPublicUSDCContractSocketClientAddress = "wss://stream.bybit.com/contract/usdc/public/v3",
+            UnifiedMarginPublicUSDCOptionSocketClientAddress = "wss://stream.bybit.com/option/usdc/public/v3"
         };
 
         /// <summary>
@@ -110,6 +137,11 @@
             InversePerpetualSocketClientAddress = "wss://stream-testnet.bybit.com/realtime",
             InverseFuturesRestClientAddress = "https://api-testnet.bybit.com",
             InverseFuturesSocketClientAddress = "wss://stream-testnet.bybit.com/realtime",
+            UnifiedMarginRestClientAddress = "https://api-testnet.bybit.com",
+            UnifiedMarginPrivateSocketClientAddress = "wss://stream-testnet.bybit.com/unified/private/v3",
+            UnifiedMarginPublicUSDTContractSocketClientAddress = "wss://stream-testnet.bybit.com/contract/usdt/public/v3",
+            UnifiedMarginPublicUSDCContractSocketClientAddress = "wss://stream-testnet.bybit.com/contract/usdc/public/v3",
+            UnifiedMarginPublicUSDCOptionSocketClientAddress = "wss://stream-testnet.bybit.com/option/usdc/public/v3"
         };
     }
 }

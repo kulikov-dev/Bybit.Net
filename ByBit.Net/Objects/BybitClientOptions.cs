@@ -1,7 +1,8 @@
-﻿using Bybit.Net.Interfaces.Clients;
+﻿using Bybit.Net.Enums;
+using Bybit.Net.Interfaces.Clients;
 using CryptoExchange.Net.Objects;
 using System;
-
+using System.Collections.Generic;
 
 namespace Bybit.Net.Objects
 {
@@ -73,6 +74,16 @@ namespace Bybit.Net.Objects
         {
             get => _copyTradingApiOptions;
             set => _copyTradingApiOptions = new RestApiClientOptions(_copyTradingApiOptions, value);
+        }
+
+        private RestApiClientOptions _unifiedMarginApiOptions = new RestApiClientOptions(BybitApiAddresses.TestNet.UnifiedMarginRestClientAddress);     //TODO genki don't forget to remove
+        /// <summary>
+        /// Unified margin API options
+        /// </summary>
+        public RestApiClientOptions UnifiedMarginApiOptions
+        {
+            get => _unifiedMarginApiOptions;
+            set => _unifiedMarginApiOptions = new RestApiClientOptions(_unifiedMarginApiOptions, value);
         }
 
         /// <summary>
@@ -189,7 +200,6 @@ namespace Bybit.Net.Objects
 
         private BybitSocketApiClientOptions _spotStreamsV3Options = new BybitSocketApiClientOptions(BybitApiAddresses.Default.SpotPublicSocketV3ClientAddress, BybitApiAddresses.Default.SpotPrivateSocketV3ClientAddress)
         {
-
             SocketSubscriptionsCombineTarget = 10,
             PingInterval = TimeSpan.FromSeconds(20)
         };
@@ -218,6 +228,25 @@ namespace Bybit.Net.Objects
             set => _copyTradingStreamsOptions = new BybitSocketApiClientOptions(_copyTradingStreamsOptions, value);
         }
 
+        private BybitUnifiedMarginSocketApiClientOptions _unifiedMarginStreamsOptions = new BybitUnifiedMarginSocketApiClientOptions(
+                                                                                                BybitApiAddresses.Default.UnifiedMarginPublicUSDTContractSocketClientAddress,
+                                                                                                BybitApiAddresses.Default.UnifiedMarginPublicUSDCContractSocketClientAddress,
+                                                                                                BybitApiAddresses.Default.UnifiedMarginPublicUSDCOptionSocketClientAddress,
+                                                                                                BybitApiAddresses.Default.UnifiedMarginPrivateSocketClientAddress)
+        {
+            SocketSubscriptionsCombineTarget = 10,
+            PingInterval = TimeSpan.FromSeconds(20)
+        };
+
+        /// <summary>
+        /// Unified margin streams options
+        /// </summary>
+        public BybitUnifiedMarginSocketApiClientOptions UnifiedMarginStreamsOptions
+        {
+            get => _unifiedMarginStreamsOptions;
+            set => _unifiedMarginStreamsOptions = new BybitUnifiedMarginSocketApiClientOptions(_unifiedMarginStreamsOptions, value);
+        }
+
         /// <summary>
         /// ctor
         /// </summary>
@@ -239,6 +268,7 @@ namespace Bybit.Net.Objects
             SpotStreamsV1Options = new BybitSocketApiClientOptions(baseOn.SpotStreamsV1Options, null);
             SpotStreamsV2Options = new BybitSocketApiClientOptions(baseOn.SpotStreamsV2Options, null);
             UsdPerpetualStreamsOptions = new BybitSocketApiClientOptions(baseOn.UsdPerpetualStreamsOptions, null);
+            UnifiedMarginStreamsOptions = new BybitUnifiedMarginSocketApiClientOptions(baseOn.UnifiedMarginStreamsOptions, null);
         }
     }
 
@@ -285,6 +315,43 @@ namespace Bybit.Net.Objects
         internal BybitSocketApiClientOptions(string baseAddress, string baseAddressAuthenticated) : base(baseAddress)
         {
             BaseAddressAuthenticated = baseAddressAuthenticated;
+        }
+    }
+
+    /// <summary>
+    /// Socket options for UnifiedMargin account
+    /// </summary>
+    public class BybitUnifiedMarginSocketApiClientOptions : BybitSocketApiClientOptions
+    {
+        private Dictionary<StreamCategory, string> PublicBaseAddresses { get; set; }
+
+        internal BybitUnifiedMarginSocketApiClientOptions(BybitUnifiedMarginSocketApiClientOptions baseOn, BybitUnifiedMarginSocketApiClientOptions? newValues) : base(baseOn, newValues)
+        {
+            PublicBaseAddresses.Clear();
+
+            foreach (var item in newValues.PublicBaseAddresses)
+            {
+                PublicBaseAddresses.Add(item.Key, item.Value);
+            }
+        }
+
+        internal BybitUnifiedMarginSocketApiClientOptions(string baseUSDTAddress, string baseUSDCAddress, string baseUSDCOptionAddress, string baseAddressAuthenticated)
+        {
+            PublicBaseAddresses = new Dictionary<StreamCategory, string>();
+
+            PublicBaseAddresses.Add(StreamCategory.USDTPerp, baseUSDTAddress);
+            PublicBaseAddresses.Add(StreamCategory.USDCPerp, baseUSDCAddress);
+            PublicBaseAddresses.Add(StreamCategory.USDCOption, baseUSDCOptionAddress);
+        }
+
+        internal string GetPublicAddress(StreamCategory category)
+        {
+            if (!PublicBaseAddresses.ContainsKey(category))
+            {
+                throw new NotSupportedException("Public stream for this StreamCategory not found.");
+            }
+
+            return PublicBaseAddresses[category];
         }
     }
 

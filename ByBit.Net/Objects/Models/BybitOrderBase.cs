@@ -28,12 +28,12 @@ namespace Bybit.Net.Objects.Models
         /// Order side
         /// </summary>
         [JsonConverter(typeof(OrderSideConverter))]
-        public OrderSide Side { get; set; }
+        public  OrderSide Side { get; set; }
         /// <summary>
         /// Order type
         /// </summary>
         [JsonProperty("order_type"), JsonConverter(typeof(OrderTypeConverter))]
-        public OrderType Type { get; set; }
+        public virtual OrderType Type { get; set; }
         /// <summary>
         /// Order price
         /// </summary>
@@ -47,7 +47,7 @@ namespace Bybit.Net.Objects.Models
         /// Time in force
         /// </summary>
         [JsonProperty("time_in_force"), JsonConverter(typeof(TimeInForceConverter))]
-        public TimeInForce TimeInForce { get; set; }
+        public virtual TimeInForce TimeInForce { get; set; }
         
         /// <summary>
         /// The estimated value corresponding to the number of remaining orders

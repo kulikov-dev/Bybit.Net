@@ -4,6 +4,7 @@ using Bybit.Net.Interfaces.Clients.InverseFuturesApi;
 using Bybit.Net.Interfaces.Clients.InversePerpetualApi;
 using Bybit.Net.Interfaces.Clients.SpotApi.v1;
 using Bybit.Net.Interfaces.Clients.SpotApi.v3;
+using Bybit.Net.Interfaces.Clients.UnifiedMarginApi;
 using Bybit.Net.Interfaces.Clients.UsdPerpetualApi;
 using CryptoExchange.Net.Interfaces;
 
@@ -42,5 +43,9 @@ namespace Bybit.Net.Interfaces.Clients
         /// Copy trading API endpoints
         /// </summary>
         IBybitClientCopyTradingApi CopyTradingApi { get; }
+        /// <summary>
+        /// Unified margin API endpoints
+        /// </summary>
+        IBybitClientUnifiedMarginApi UnifiedMarginApi { get; }
     }
 }

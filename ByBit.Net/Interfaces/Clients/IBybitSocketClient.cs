@@ -2,6 +2,7 @@
 using Bybit.Net.Interfaces.Clients.SpotApi.v1;
 using Bybit.Net.Interfaces.Clients.SpotApi.v2;
 using Bybit.Net.Interfaces.Clients.SpotApi.v3;
+using Bybit.Net.Interfaces.Clients.UnifiedMarginApi;
 using Bybit.Net.Interfaces.Clients.UsdPerpetualApi;
 using CryptoExchange.Net.Interfaces;
 
@@ -36,5 +37,10 @@ namespace Bybit.Net.Interfaces.Clients
         /// Copy trading streams
         /// </summary>
         public IBybitSocketClientCopyTradingStreams CopyTrading { get; }
+
+        /// <summary>
+        /// Unified margin streams
+        /// </summary>
+        public IBybitSocketClientUnifiedMarginStreams UnifiedMarginStreams { get; }
     }
 }

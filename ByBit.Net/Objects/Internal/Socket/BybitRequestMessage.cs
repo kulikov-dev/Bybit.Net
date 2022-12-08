@@ -7,7 +7,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Bybit.Net.Objects.Internal.Socket
 {
-    internal class BybitFuturesRequestMessage
+    internal class BybitRequestMessage
     {
         [JsonProperty("op")]
         public string Operation { get; set; } = string.Empty;

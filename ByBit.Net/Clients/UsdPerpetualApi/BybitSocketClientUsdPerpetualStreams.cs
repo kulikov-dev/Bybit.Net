@@ -38,7 +38,7 @@ namespace Bybit.Net.Clients.UsdPerpetualApi
 
             SendPeriodic("Ping", options.InversePerpetualStreamsOptions.PingInterval, (connection) =>
             {
-                return new BybitFuturesRequestMessage() { Operation = "ping" };
+                return new BybitRequestMessage() { Operation = "ping" };
             });
             AddGenericHandler("Heartbeat", (evnt) => { });
         }
@@ -74,7 +74,7 @@ namespace Bybit.Net.Clients.UsdPerpetualApi
                 handler(data.As(desResult.Data, desResult.Data.First().Symbol));
             });
             return await SubscribeAsync( BaseAddress,
-                new BybitFuturesRequestMessage() { Operation = "subscribe", Parameters = symbols.Select(s => "trade." + s).ToArray() },
+                new BybitRequestMessage() { Operation = "subscribe", Parameters = symbols.Select(s => "trade." + s).ToArray() },
                 null, false, internalHandler, ct).ConfigureAwait(false);
         }
 
@@ -106,7 +106,7 @@ namespace Bybit.Net.Clients.UsdPerpetualApi
 
             });
             return await SubscribeAsync(
-                new BybitFuturesRequestMessage() { Operation = "subscribe", Parameters = symbols.Select(s => "instrument_info.100ms." + s).ToArray() },
+                new BybitRequestMessage() { Operation = "subscribe", Parameters = symbols.Select(s => "instrument_info.100ms." + s).ToArray() },
                 null, false, internalHandler, ct).ConfigureAwait(false);
         }
 
@@ -160,7 +160,7 @@ namespace Bybit.Net.Clients.UsdPerpetualApi
             });
             var topic = limit == 25 ? "orderBookL2_25." : "orderBook_200.100ms.";
             return await SubscribeAsync(
-                new BybitFuturesRequestMessage() { Operation = "subscribe", Parameters = symbols.Select(s => topic + s).ToArray() },
+                new BybitRequestMessage() { Operation = "subscribe", Parameters = symbols.Select(s => topic + s).ToArray() },
                 null, false, internalHandler, ct).ConfigureAwait(false);
         }
 
@@ -188,7 +188,7 @@ namespace Bybit.Net.Clients.UsdPerpetualApi
                 handler(data.As(desResult.Data, topic.Split('.').Last()));
             });
             return await SubscribeAsync(
-                new BybitFuturesRequestMessage() { Operation = "subscribe", Parameters = symbols.Select(s => "candle." + JsonConvert.SerializeObject(interval, new KlineIntervalConverter(false)) + "." + s).ToArray() },
+                new BybitRequestMessage() { Operation = "subscribe", Parameters = symbols.Select(s => "candle." + JsonConvert.SerializeObject(interval, new KlineIntervalConverter(false)) + "." + s).ToArray() },
                 null, false, internalHandler, ct).ConfigureAwait(false);
         }
 
@@ -219,7 +219,7 @@ namespace Bybit.Net.Clients.UsdPerpetualApi
                 handler(data.As(desResult.Data, desResult.Data.Symbol));
             });
             return await SubscribeAsync(
-                new BybitFuturesRequestMessage() { Operation = "subscribe", Parameters = symbols.Select(s => "liquidation." + s).ToArray() },
+                new BybitRequestMessage() { Operation = "subscribe", Parameters = symbols.Select(s => "liquidation." + s).ToArray() },
                 null, false, internalHandler, ct).ConfigureAwait(false);
         }
 
@@ -242,7 +242,7 @@ namespace Bybit.Net.Clients.UsdPerpetualApi
                 handler(data.As(desResult.Data));
             });
             return await SubscribeAsync( _options.UsdPerpetualStreamsOptions.BaseAddressAuthenticated,
-                new BybitFuturesRequestMessage() { Operation = "subscribe", Parameters = new[] { "position" } },
+                new BybitRequestMessage() { Operation = "subscribe", Parameters = new[] { "position" } },
                 null, true, internalHandler, ct).ConfigureAwait(false);
         }
 
@@ -265,7 +265,7 @@ namespace Bybit.Net.Clients.UsdPerpetualApi
                 handler(data.As(desResult.Data));
             });
             return await SubscribeAsync( _options.UsdPerpetualStreamsOptions.BaseAddressAuthenticated,
-                new BybitFuturesRequestMessage() { Operation = "subscribe", Parameters = new[] { "execution" } },
+                new BybitRequestMessage() { Operation = "subscribe", Parameters = new[] { "execution" } },
                 null, true, internalHandler, ct).ConfigureAwait(false);
         }
 
@@ -288,7 +288,7 @@ namespace Bybit.Net.Clients.UsdPerpetualApi
                 handler(data.As(desResult.Data));
             });
             return await SubscribeAsync( _options.UsdPerpetualStreamsOptions.BaseAddressAuthenticated,
-                new BybitFuturesRequestMessage() { Operation = "subscribe", Parameters = new[] { "order" } },
+                new BybitRequestMessage() { Operation = "subscribe", Parameters = new[] { "order" } },
                 null, true, internalHandler, ct).ConfigureAwait(false);
         }
 
@@ -311,7 +311,7 @@ namespace Bybit.Net.Clients.UsdPerpetualApi
                 handler(data.As(desResult.Data));
             });
             return await SubscribeAsync( _options.UsdPerpetualStreamsOptions.BaseAddressAuthenticated,
-                new BybitFuturesRequestMessage() { Operation = "subscribe", Parameters = new[] { "stop_order" } },
+                new BybitRequestMessage() { Operation = "subscribe", Parameters = new[] { "stop_order" } },
                 null, true, internalHandler, ct).ConfigureAwait(false);
         }
 
@@ -334,7 +334,7 @@ namespace Bybit.Net.Clients.UsdPerpetualApi
                 handler(data.As(desResult.Data));
             });
             return await SubscribeAsync( _options.UsdPerpetualStreamsOptions.BaseAddressAuthenticated,
-                new BybitFuturesRequestMessage() { Operation = "subscribe", Parameters = new[] { "wallet" } },
+                new BybitRequestMessage() { Operation = "subscribe", Parameters = new[] { "wallet" } },
                 null, true, internalHandler, ct).ConfigureAwait(false);
         }
 
@@ -349,7 +349,7 @@ namespace Bybit.Net.Clients.UsdPerpetualApi
             var key = socketConnection.ApiClient.AuthenticationProvider.Credentials.Key!.GetString();
             var sign = socketConnection.ApiClient.AuthenticationProvider.Sign($"GET/realtime{expireTime}");
 
-            var authRequest = new BybitFuturesRequestMessage()
+            var authRequest = new BybitRequestMessage()
             {
                 Operation = "auth",
                 Parameters = new object[]
@@ -392,7 +392,7 @@ namespace Bybit.Net.Clients.UsdPerpetualApi
             if (data.Type != JTokenType.Object)
                 return false;
 
-            var requestParams = ((BybitFuturesRequestMessage)request).Parameters;
+            var requestParams = ((BybitRequestMessage)request).Parameters;
             var operation = data["request"]?["op"]?.ToString();
             var args = data["request"]?["args"].Select(p => p.ToString()).ToList();
             if (operation != "subscribe")
@@ -419,7 +419,7 @@ namespace Bybit.Net.Clients.UsdPerpetualApi
             if (topic == null)
                 return false;
                         
-            var requestParams = ((BybitFuturesRequestMessage)request).Parameters;
+            var requestParams = ((BybitRequestMessage)request).Parameters;
             if (requestParams.Any(p => topic == p.ToString()))
                 return true;
 
@@ -477,8 +477,8 @@ namespace Bybit.Net.Clients.UsdPerpetualApi
         /// <inheritdoc />
         protected override async Task<bool> UnsubscribeAsync(SocketConnection connection, SocketSubscription subscriptionToUnsub)
         {
-            var requestParams = ((BybitFuturesRequestMessage)subscriptionToUnsub.Request!).Parameters;
-            var message = new BybitFuturesRequestMessage { Operation = "unsubscribe", Parameters = requestParams };
+            var requestParams = ((BybitRequestMessage)subscriptionToUnsub.Request!).Parameters;
+            var message = new BybitRequestMessage { Operation = "unsubscribe", Parameters = requestParams };
 
             var result = false;
             await connection.SendAndWaitAsync(message, Options.SocketResponseTimeout, data =>

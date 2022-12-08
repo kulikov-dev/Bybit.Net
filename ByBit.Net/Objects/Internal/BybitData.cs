@@ -1,4 +1,5 @@
-﻿using Bybit.Net.Objects.Models;
+﻿using Bybit.Net.Enums;
+using Bybit.Net.Objects.Models;
 using Newtonsoft.Json;
 
 namespace Bybit.Net.Objects.Internal
@@ -18,6 +19,8 @@ namespace Bybit.Net.Objects.Internal
 
         [JsonProperty("list")]
         internal T ListData { set => Data = value; get => Data; }
+        [JsonProperty("dataList")]
+        internal T ListDataUnified { set => Data = value; get => Data; }
         [JsonProperty("rows")]
         internal T RowData { set => Data = value; get => Data; }
     }
@@ -32,6 +35,25 @@ namespace Bybit.Net.Objects.Internal
         /// Cursor for requesting next/previous page
         /// </summary>
         public string? Cursor { get; set; }
+
+        /// <summary>
+        /// For supporting Unified Margin API
+        /// </summary>
+        /// <remarks> Different approaches and namings in API </remarks>
+        [JsonProperty("nextPageCursor")]
+        internal string? NextCursor { set => Cursor = value; get => Cursor; }
+    }
+
+    /// <summary>
+    /// Cursof paged data wrapper for unified margin
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public class BybitUnifiedMarginCursorPage<T> : BybitCursorPage<T>
+    {
+        /// <summary>
+        /// Type of derivatives product
+        /// </summary>
+        public Category Category = Category.Undefied;
     }
 
     /// <summary>

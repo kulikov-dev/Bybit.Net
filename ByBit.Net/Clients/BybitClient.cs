@@ -16,6 +16,8 @@ using CryptoExchange.Net;
 using Bybit.Net.Clients.SpotApi.v1;
 using Bybit.Net.Clients.SpotApi.v3;
 using Bybit.Net.Interfaces.Clients.SpotApi.v3;
+using Bybit.Net.Interfaces.Clients.UnifiedMarginApi;
+using Bybit.Net.Clients.UnifiedMarginApi;
 
 namespace Bybit.Net.Clients
 {
@@ -36,6 +38,8 @@ namespace Bybit.Net.Clients
         public IBybitClientUsdPerpetualApi UsdPerpetualApi { get; }
         /// <inheritdoc />
         public IBybitClientCopyTradingApi CopyTradingApi { get; }
+        /// <inheritdoc />
+        public IBybitClientUnifiedMarginApi UnifiedMarginApi { get; }
 
         #region constructor/destructor
         /// <summary>
@@ -58,6 +62,7 @@ namespace Bybit.Net.Clients
             SpotApiV3 = AddApiClient(new BybitClientSpotApiV3(log, options));
             GeneralApi = AddApiClient(new BybitClientGeneralApi(log, this, options));
             CopyTradingApi = AddApiClient(new BybitClientCopyTradingApi(log, options));
+            UnifiedMarginApi = AddApiClient(new BybitClientUnifiedMarginApi(log, options));
         }
         #endregion
 

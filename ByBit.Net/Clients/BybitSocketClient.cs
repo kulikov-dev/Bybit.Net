@@ -25,6 +25,8 @@ using Bybit.Net.Interfaces.Clients.SpotApi;
 using Bybit.Net.Interfaces.Clients.SpotApi.v1;
 using Bybit.Net.Interfaces.Clients.SpotApi.v2;
 using Bybit.Net.Interfaces.Clients.SpotApi.v3;
+using Bybit.Net.Interfaces.Clients.UnifiedMarginApi;
+using Bybit.Net.Clients.UnifiedMarginApi;
 
 namespace Bybit.Net.Clients
 {
@@ -41,9 +43,10 @@ namespace Bybit.Net.Clients
         public IBybitSocketClientSpotStreamsV2 SpotStreamsV2 { get; }
         /// <inheritdoc />
         public IBybitSocketClientSpotStreamsV3 SpotStreamsV3 { get; }
-
         /// <inheritdoc />
         public IBybitSocketClientCopyTradingStreams CopyTrading { get; }
+        /// <inheritdoc />
+        public IBybitSocketClientUnifiedMarginStreams UnifiedMarginStreams { get; }
 
         /// <summary>
         /// Create a new instance of BybitSocketClientFutures using the default options
@@ -66,8 +69,8 @@ namespace Bybit.Net.Clients
             SpotStreamsV1 = AddApiClient(new BybitSocketClientSpotStreamsV1(log, options));
             SpotStreamsV2 = AddApiClient(new BybitSocketClientSpotStreamsV2(log, options));
             SpotStreamsV3 = AddApiClient(new BybitSocketClientSpotStreamsV3(log, options));
-
             CopyTrading = AddApiClient(new BybitSocketClientCopyTradingStreams(log, options));
+            UnifiedMarginStreams = AddApiClient(new BybitSocketClientUnifiedMarginStreams(log, options));
         }
 
         /// <summary>
